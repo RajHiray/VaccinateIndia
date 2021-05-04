@@ -1,7 +1,63 @@
 ﻿@page "/"
+@using Syncfusion.Blazor.Buttons
 
-<h1>Hello, world!</h1>
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="container switch-control">
 
-Welcome to your new app.
+            <div>
+                <h4 class="heading">Hotspot & tethering</h4>
+            </div>
+            <div>
+                <label style="padding: 10px 70px 10px 0">USB Tethering</label>
+                <SfSwitch @bind-Checked="@isUSB"></SfSwitch>
+            </div>
+            <div>
+                <label style="padding: 10px 24px 10px 0">Portable Wi-Fi hotspot</label>
+                <SfSwitch @bind-Checked="@ishotspot"></SfSwitch>
+            </div>
+            <div>
+                <label style="padding: 10px 40px 10px 0">Bluetooth Tethering</label>
+                <SfSwitch Disabled="true" @bind-Checked="@isBluetooth"></SfSwitch>
+            </div>
+        </div>
+    </div>
+</div>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code { private bool isUSB = true;
+            private bool ishotspot = false;
+            private bool isBluetooth = false; }
+
+<style>
+    /* Switch Styles */
+    .content-wrapper {
+        margin-top: 47px;
+    }
+
+    .switch-control .heading {
+        text-indent: 15px;
+        padding: 15px 0;
+    }
+
+    .switch-control div {
+        display: flex;
+        align-items: center;
+    }
+
+    .switch-control {
+        margin: 0 auto;
+        width: 275px;
+    }
+
+        .switch-control label {
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+            user-select: none;
+            font-weight: 400;
+            font-size: 13px;
+        }
+
+        .switch-control .e-disabled {
+            pointer-events: none;
+        }
+</style>
