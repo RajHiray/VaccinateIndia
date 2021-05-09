@@ -1,0 +1,118 @@
+﻿@using System.ComponentModel.DataAnnotations;
+@using System.Text.Json;
+@inject HttpClient Http
+
+@if (!string.IsNullOrEmpty(AlertMsg))
+{
+    <div class="alert alert-success mt-5" role="alert">
+        @AlertMsg
+    </div>
+}
+
+<EditForm EditContext="@editContext" OnSubmit="@OnSubscribe">
+    <DataAnnotationsValidator />
+    <div class="form-group row mt-5">
+        <label for="FirstName" class="col-sm-2 col-form-label">Enter First Name : </label>
+        <div class="col-sm-4">
+            <input type="text" @bind-value="@notification.FirstName" class="form-control" id="FirstName" placeholder="First Name" />
+            <ValidationMessage For="() => notification.FirstName" />
+        </div>
+    </div>
+    <div class="form-group row mt-5">
+        <label for="EmailId" class="col-sm-2 col-form-label">Enter Email Id : </label>
+        <div class="col-sm-4">
+            <input type="text" @bind-value="@notification.EmailId" class="form-control" id="EmailId" placeholder="Email Id" />
+            <ValidationMessage For="() => notification.EmailId" />
+        </div>
+    </div>
+    <div class="form-group row mt-5">
+        <label for="Age" class="col-sm-2 col-form-label">Enter Age : </label>
+        <div class="col-sm-4">
+            <input type="text" @bind-value="@notification.Age" class="form-control" id="Age" placeholder="Age" />
+            <ValidationMessage For="() => notification.Age" />
+        </div>
+    </div>
+    <div class="form-group row mt-5">
+        <label for="PinCode" class="col-sm-2 col-form-label">Enter PinCode : </label>
+        <div class="col-sm-4">
+            <input type="text" @bind-value="@notification.PinCode" class="form-control" id="PinCode" placeholder="PinCode" />
+            <ValidationMessage For="() => notification.PinCode" />
+        </div>
+    </div>
+    <div class="form-group row mt-5">
+        <label for="Notification Count" class="col-sm-2 col-form-label">Enter Notification Count (Default 5) : </label>
+        <div class="col-sm-4">
+            <input type="text" @bind-value="@notification.NotificationCount" class="form-control" id="Count" placeholder="Count" />
+            <ValidationMessage For="() => notification.NotificationCount" />
+        </div>
+    </div>
+
+    <div class="form-group row mt-5">
+        <button type="submit" class="btn btn-primary offset-1 col-sm-2"> Subscribe </button>
+    </div>
+</EditForm>
+
+
+@code {
+    Notification notification = new Notification();
+    private EditContext editContext;
+    public string AlertMsg { get; set; }
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(notification);
+    }
+
+    private async Task OnSubscribe()
+    {
+        string responseBody = string.Empty;
+        AlertMsg = string.Empty;
+        if (editContext.Validate())
+        {
+            var requestMessage = new HttpRequestMessage()
+            {
+                Method = new HttpMethod("POST"),
+                RequestUri = new Uri(Constant.APIPostNotofication),
+                Content = JsonContent.Create(notification)
+            };
+
+            try
+            {
+                var response = await Http.SendAsync(requestMessage);
+                var responseStatusCode = response.StatusCode;
+                responseBody = await response.Content.ReadAsStringAsync();
+                notification = new Notification();
+                AlertMsg = Constant.AlertMsgSubscribe;
+                editContext = new EditContext(notification);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            //Console.WriteLine(responseBody);
+        }
+        else
+        {
+            Console.WriteLine("Invalid");
+        }
+    }
+
+    class Notification
+    {
+        [Required(ErrorMessage = "Please Enter First Name")]
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        [Required(ErrorMessage = "Please Enter Email Id")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "Please enter valid Email ID")]
+        [EmailAddress]
+        public string EmailId { get; set; }
+        [Required(ErrorMessage = "Please Enter Age")]
+        [Range(18, 150, ErrorMessage = "Enter valid Age")]
+        public int? Age { get; set; }
+        [Required(ErrorMessage = "Please Enter PinCode")]
+        public int? PinCode { get; set; }
+        public int? DistrictId { get; set; }
+        public string DistrictName { get; set; }
+        public int NotificationCount { get; set; } = 5;
+        public bool IsByPin { get; set; }
+    }
+}
