@@ -2,12 +2,21 @@
 
 @if (slots == null)
 {
-    <p><em>Loading...</em></p>
+    @if (!string.IsNullOrEmpty(alertMsg))
+    {
+        <div class="alert alert-danger" role="alert">
+            @alertMsg
+        </div>
+    }
+    else
+    {
+        <p><em>Loading...</em></p>
+    }
 }
 else
 {
     @if (!slots.sessions.Any())
-    {        
+    {
         <div class="alert alert-info" role="alert">
             @alertMsg
         </div>
@@ -34,9 +43,9 @@ else
                 <td>
                     <ul>
                         @foreach (var slot in context?.slots)
-                         {
+                                {
                             <li>@slot</li>
-                         }
+                                }
                     </ul>
                 </td>
             </MatTableRow>
@@ -44,7 +53,7 @@ else
     }
 }
 
-@code 
+@code
 {
     [Parameter]
     public string apiUrl { get; set; }
@@ -62,7 +71,10 @@ else
         }
         catch (Exception Ex)
         {
-            //if(401)
+            if (Ex.Message.Contains("Bad Request"))
+                alertMsg = Constant.AlertMsgNoData;
+            if (Ex.Message.Contains("Forbidden"))
+                alertMsg = Constant.AlertMsgForbidden;
             Console.WriteLine(Ex.Message);
         }
 

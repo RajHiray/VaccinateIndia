@@ -1,27 +1,35 @@
-﻿@inject HttpClient Http
+﻿@using System.ComponentModel.DataAnnotations;
+@inject HttpClient Http
 
 @if (StatesDataSource != null)
 {
-    <div class="form-group row mt-5">
-        <label for="inputpin" class="col-sm-2 col-form-label"> Select District : </label>
-        <div class="col-sm-4">
-            <CustomDropdown DDName="District" DataSource="StatesDataSource" @bind-SelectedId="DistrictId">
-            </CustomDropdown>
-        </div>
-    </div>
-    <div class="form-group row mt-5">
-        <label for="inputdate" class="col-sm-2 col-form-label">Select Date : </label>
-        <div class="col-sm-4">
-            <input required type="date" @bind="@FeaturesDateTime" class="form-control" id="inputFeaturesDateTime" placeholder="Select Date" />
-        </div>
-    </div>
+    <EditForm Model=@district>
+        <DataAnnotationsValidator />
 
-    <div class="form-group row mt-5">
-        <button type="button" @onclick="OnSearch" class="btn btn-primary offset-1 col-sm-2"> Search </button>
-    </div>
+        <div class="form-group row mt-5">
+            <label for="DistrictId" class="col-sm-2 col-form-label"> Select District : </label>
+            <div class="col-sm-4">
+                <CustomDropdown DDName="District" DataSource="StatesDataSource" @bind-SelectedId="@district.DistrictId">
+                </CustomDropdown>
+                <ValidationMessage For="() => district.DistrictId" />
+            </div>
+        </div>
+        <div class="form-group row mt-5">
+            <label for="FeaturesDateTime" class="col-sm-2 col-form-label">Select Date : </label>
+            <div class="col-sm-4">
+                <input type="date" @bind="@district.FeaturesDateTime" class="form-control" id="FeaturesDateTime" placeholder="Select Date" />
+                <ValidationMessage For="() => district.FeaturesDateTime" />
+            </div>
+        </div>
+
+        <div class="form-group row mt-5">
+            <button type="button" @onclick="OnSearch" class="btn btn-primary offset-1 col-sm-2"> Search </button>
+        </div>
+    </EditForm>
 }
 
 @code {
+    ByDistrict district = new ByDistrict();
 
     [Parameter]
     public int SelectedId { get; set; }
@@ -31,16 +39,14 @@
 
     public Dictionary<int, string> StatesDataSource { get; set; }
 
-    public int DistrictId { get; set; }
-
-    public DateTime? FeaturesDateTime { get; set; } = DateTime.Now;
-
     private void OnSearch()
     {
-        string apiUrl = string.Format(Constant.APIBaseUrl + Constant.FindByDistrict, DistrictId, FeaturesDateTime?.ToString("dd-MM-yyyy"));
-        SerchResult.InvokeAsync(apiUrl);
+        if(district.DistrictId>0 && district.FeaturesDateTime.HasValue)
+        {
+            string apiUrl = string.Format(Constant.APIBaseUrl + Constant.FindByDistrict, district.DistrictId, district.FeaturesDateTime?.ToString("dd-MM-yyyy"));
+            SerchResult.InvokeAsync(apiUrl);
+        }
     }
-
 
     protected override async Task OnParametersSetAsync()
     {
@@ -60,4 +66,15 @@
         }
     }
 
+    class ByDistrict
+    {
+        public int StateId { get; set; }
+
+        [Required(ErrorMessage = "Please Select District")]
+        public int DistrictId { get; set; }
+
+        [Required(ErrorMessage = "Please Select Date")]
+        public DateTime? FeaturesDateTime { get; set; } = DateTime.Now;
+
+    }
 }

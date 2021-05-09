@@ -1,7 +1,7 @@
 ﻿@inject HttpClient Http
 
 <div class="form-group row mt-5">
-    <label for="inputpin" class="col-sm-2 col-form-label"> Select State : </label>
+    <label for="inputpin" class="col-sm-2 col-form-label required"> Select State : </label>
     <div class="col-sm-4">
         <CustomDropdown DDName="State" DataSource="StatesDataSource" @bind-SelectedId="StateId">
         </CustomDropdown>

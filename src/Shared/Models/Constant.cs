@@ -15,7 +15,8 @@ namespace BlazorPages.Shared.Models
 
         //Alert msg
         public static string AlertMsgNoVaccination = "No Vaccination center is available for booking.";
-
+        public static string AlertMsgNoData = "Please Provide Valid Inputs";
+        public static string AlertMsgForbidden = "Setu API Not accessible Outside the India Network.";
 
     }
 }
