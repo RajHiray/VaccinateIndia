@@ -1,0 +1,33 @@
+﻿
+<div class="form-group row mt-5">
+    <label for="inputpin" class="col-sm-2 col-form-label">Enter Pincode : </label>
+    <div class="col-sm-4">
+        <input required type="text" @bind="@Pincode" class="form-control" id="inputpin" placeholder="Pincode" />
+    </div>
+</div>
+<div class="form-group row mt-5">
+    <label for="inputdate" class="col-sm-2 col-form-label">Select Date : </label>
+    <div class="col-sm-4">
+        <input required type="date" @bind="@FeaturesDateTime" class="form-control" id="inputFeaturesDateTime" placeholder="Select Date" />
+    </div>
+</div>
+<div class="form-group row mt-5">
+    <button type="button" @onclick="OnSearch" class="btn btn-primary offset-1 col-sm-2"> Search </button>
+</div>
+
+@code {
+
+    public string Pincode { get; set; }
+
+    public DateTime? FeaturesDateTime { get; set; } = DateTime.Now;
+
+    private void OnSearch()
+    {
+        string apiUrl = string.Format(Constant.APIBaseUrl + Constant.FindByPin, Pincode, FeaturesDateTime?.ToString("dd-MM-yyyy"));
+        SerchResult.InvokeAsync(apiUrl);
+    }
+
+    [Parameter]
+    public EventCallback<string> SerchResult { get; set; }
+
+}

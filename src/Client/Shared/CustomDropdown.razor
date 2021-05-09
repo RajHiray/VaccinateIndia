@@ -1,0 +1,34 @@
+﻿
+@if (DataSource != null)
+{
+    <select class="custom-select" @onchange="OnSelectedIdChanged" title="@DDName is required ">
+        <option value="Select" selected disabled="disabled">Select @DDName</option>
+        @foreach (var item in DataSource)
+        {
+            <option value="@item.Key"> @item.Value</option>
+        }
+    </select>
+}
+
+
+@code {
+
+    [Parameter]
+    public string DDName { get; set; }
+
+    [Parameter]
+    public Dictionary<int, string> DataSource { get; set; }
+
+    [Parameter]
+    public int SelectedId { get; set; }
+
+    [Parameter]
+    public EventCallback<int> SelectedIdChanged { get; set; }
+
+    private Task OnSelectedIdChanged(ChangeEventArgs e)
+    {
+        SelectedId = Convert.ToInt32(e.Value);
+        return SelectedIdChanged.InvokeAsync(SelectedId);
+    }
+
+}

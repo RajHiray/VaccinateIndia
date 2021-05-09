@@ -6,7 +6,16 @@ namespace BlazorPages.Shared.Models
 {
     public class Constant
     {
-        public static string APIBaseUrl = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/";
-        public static string findByPin = "findByPin?pincode={0}&date={1}";
+        //API
+        public static string APIBaseUrl = "https://cdn-api.co-vin.in/api/v2/";
+        public static string FindByPin = "appointment/sessions/public/findByPin?pincode={0}&date={1}";
+        public static string FindByDistrict = "appointment/sessions/public/findByDistrict?district_id={0}&date={1}";
+        public static string GetStates= "admin/location/states";
+        public static string  GetDistrictByStateId= "admin/location/districts/{0}";
+
+        //Alert msg
+        public static string AlertMsgNoVaccination = "No Vaccination center is available for booking.";
+
+
     }
 }

@@ -1,0 +1,38 @@
+﻿@inject HttpClient Http
+
+<div class="form-group row mt-5">
+    <label for="inputpin" class="col-sm-2 col-form-label"> Select State : </label>
+    <div class="col-sm-4">
+        <CustomDropdown DDName="State" DataSource="StatesDataSource" @bind-SelectedId="StateId">
+        </CustomDropdown>
+    </div>
+</div>
+<CascadingDropDown SelectedId="StateId" SerchResult="SerchResult"/>
+
+
+@code {
+
+    [Parameter]
+    public EventCallback<string> SerchResult { get; set; }
+
+    public int StateId { get; set; }
+
+    private Dictionary<int, string> StatesDataSource { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var States = await Http.GetFromJsonAsync<States>(Constant.APIBaseUrl+Constant.GetStates);
+            StatesDataSource = new Dictionary<int, string>();
+            foreach (var state in States?.states)
+            {
+                StatesDataSource.Add(state.state_id, state.state_name);
+            }
+        }
+        catch (Exception Ex)
+        {
+            Console.WriteLine(Ex.Message);
+        }
+    }
+}

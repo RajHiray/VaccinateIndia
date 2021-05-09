@@ -1,0 +1,63 @@
+﻿@inject HttpClient Http
+
+@if (StatesDataSource != null)
+{
+    <div class="form-group row mt-5">
+        <label for="inputpin" class="col-sm-2 col-form-label"> Select District : </label>
+        <div class="col-sm-4">
+            <CustomDropdown DDName="District" DataSource="StatesDataSource" @bind-SelectedId="DistrictId">
+            </CustomDropdown>
+        </div>
+    </div>
+    <div class="form-group row mt-5">
+        <label for="inputdate" class="col-sm-2 col-form-label">Select Date : </label>
+        <div class="col-sm-4">
+            <input required type="date" @bind="@FeaturesDateTime" class="form-control" id="inputFeaturesDateTime" placeholder="Select Date" />
+        </div>
+    </div>
+
+    <div class="form-group row mt-5">
+        <button type="button" @onclick="OnSearch" class="btn btn-primary offset-1 col-sm-2"> Search </button>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public int SelectedId { get; set; }
+
+    [Parameter]
+    public EventCallback<string> SerchResult { get; set; }
+
+    public Dictionary<int, string> StatesDataSource { get; set; }
+
+    public int DistrictId { get; set; }
+
+    public DateTime? FeaturesDateTime { get; set; } = DateTime.Now;
+
+    private void OnSearch()
+    {
+        string apiUrl = string.Format(Constant.APIBaseUrl + Constant.FindByDistrict, DistrictId, FeaturesDateTime?.ToString("dd-MM-yyyy"));
+        SerchResult.InvokeAsync(apiUrl);
+    }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            string apiUrl = string.Format(Constant.APIBaseUrl + Constant.GetDistrictByStateId, SelectedId);
+            var ListDistricts = await Http.GetFromJsonAsync<Districts>(apiUrl);
+            StatesDataSource = new Dictionary<int, string>();
+            foreach (var item in ListDistricts?.districts)
+            {
+                StatesDataSource.Add(item.district_id, item.district_name);
+            }
+        }
+        catch (Exception Ex)
+        {
+            Console.WriteLine(Ex.Message);
+        }
+    }
+
+}

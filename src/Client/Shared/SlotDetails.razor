@@ -1,0 +1,73 @@
+﻿@inject HttpClient Http
+
+@if (slots == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @if (!slots.sessions.Any())
+    {        
+        <div class="alert alert-info" role="alert">
+            @alertMsg
+        </div>
+    }
+    else
+    {
+        <MatTable Items="@slots?.sessions" class="mat-elevation-z5" ShowPaging="false" UseSortHeaderRow="true">
+            <MatTableHeader>
+                <MatSortHeaderRow>
+                    <MatSortHeader SortId="name"><span style="width:150px">Name</span></MatSortHeader>
+                    <MatSortHeader SortId="address"><span style="width:250px"> Address</span></MatSortHeader>
+                    <MatSortHeader SortId="fee_type"><span style="width:100px"> Free Type</span></MatSortHeader>
+                    <MatSortHeader SortId="vaccine"><span style="width:100px"> Vaccine</span></MatSortHeader>
+                    <MatSortHeader SortId="min_age_limit"><span style="width:100px"> Age Limit</span></MatSortHeader>
+                    <MatSortHeader SortId="slots"><span style="width:250px">Slots</span></MatSortHeader>
+                </MatSortHeaderRow>
+            </MatTableHeader>
+            <MatTableRow>
+                <td>@context.name</td>
+                <td> @context.address</td>
+                <td>@context.fee_type</td>
+                <td>@context.vaccine</td>
+                <td>@context.min_age_limit</td>
+                <td>
+                    <ul>
+                        @foreach (var slot in context?.slots)
+                         {
+                            <li>@slot</li>
+                         }
+                    </ul>
+                </td>
+            </MatTableRow>
+        </MatTable>
+    }
+}
+
+@code 
+{
+    [Parameter]
+    public string apiUrl { get; set; }
+
+    private static Slot slots = null;
+
+    private string alertMsg = string.Empty;
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+        try
+        {
+            slots = await Http.GetFromJsonAsync<Slot>(apiUrl);
+        }
+        catch (Exception Ex)
+        {
+            //if(401)
+            Console.WriteLine(Ex.Message);
+        }
+
+        if (slots != null && !slots.sessions.Any())
+            alertMsg = Constant.AlertMsgNoVaccination;
+
+    }
+}

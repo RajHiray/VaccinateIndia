@@ -1,98 +1,67 @@
 ﻿@page "/"
 @inject HttpClient Http
-
-
+@using Microsoft.AspNetCore.Components;
 
 <div class="content-wrapper">
     <h2>Check Vaccination Slots Availability</h2>
-    <MatTabBar>
-        <MatTabLabel>Search By PinCode</MatTabLabel>
+
+    @* Toggle - Search By Pin code and Serch By District code *@
+    <MatTabBar @onclick="ToggleByPinCode" @bind-ActiveIndex="ActiveIndex">
+        <MatTabLabel> Search By PinCode</MatTabLabel>
         <MatTabLabel>Search By District </MatTabLabel>
     </MatTabBar>
 
-    <form>
-        <div class="form-group row mt-5">
-            <label for="inputpin" class="col-sm-2 col-form-label">Enter Pincode : </label>
-            <div class="col-sm-4">
-                <input @bind="pinCode" type="text" class="form-control" id="inputpin" placeholder="Pincode">
-            </div>
-            @*<button type="button" class="btn btn-primary col-sm-2"> Search </button>*@
-        </div>
-        <div class="form-group row mt-5">
-            <label for="inputdate" class="col-sm-2 col-form-label">Select Date : </label>
-            <div class="col-sm-4">
-                <MatDatePicker @bind-Value="FeaturesDateTime" Minimum="@DateTime.Now"></MatDatePicker>
-            </div>
-            <button type="button" @onclick="Toggle" class="btn btn-primary col-sm-2"> Search </button>
-        </div>
-    </form>
+    @if (IsSearchByPin)
+    {
+        <SearchByPin SerchResult="SerchResult"/>        
+    }
+    else
+    {
+        <SearchByDistrict SerchResult="SerchResult"/>
+    }
 
+    <div id="component-container">
+        @DynamicRender
+    </div>
 
-    <MatTable Items="@slots?.sessions" class="mat-elevation-z5" ShowPaging="false" UseSortHeaderRow="true">
-        <MatTableHeader>
-            <MatSortHeaderRow>
-                <MatSortHeader SortId="name"><span style="width:150px">Name</span></MatSortHeader>
-                <MatSortHeader SortId="address"><span style="width:250px"> Address</span></MatSortHeader>
-                <MatSortHeader SortId="fee_type"><span style="width:100px"> Free Type</span></MatSortHeader>
-                <MatSortHeader SortId="vaccine"><span style="width:100px"> Vaccine</span></MatSortHeader>
-                <MatSortHeader SortId="min_age_limit"><span style="width:100px"> Age Limit</span></MatSortHeader>
-                <MatSortHeader SortId="slots"><span style="width:250px">Slots</span></MatSortHeader>                
-            </MatSortHeaderRow>
-        </MatTableHeader>
-        <MatTableRow>
-            <td>@context.name</td>
-            <td> @context.address</td>
-            <td>@context.fee_type</td>
-            <td>@context.vaccine</td>
-            <td>@context.min_age_limit</td>
-            <td>
-                <ul>
-                    @foreach (var slot in context?.slots)
-                    {   
-                        <li>@slot</li>
-                    }
-                </ul>
-            </td>
-        </MatTableRow>
-    </MatTable>
 </div>
 
 @code {
-    private bool Val1 = false;
-    private bool Val2 = true;
-    private string Caption => isMoving ? "Search By District " : "Search By PinCode ";
-    private string pinCode = string.Empty;
-    private DateTime? FeaturesDateTime = DateTime.Now;
-    private bool isMoving = true;
+    private bool IsSearchByPin = true;
+    private int ActiveIndex;
+    private RenderFragment DynamicRender { get; set; }
 
-    private static Slot slots = new Slot() {
-        sessions = new List<Session>()
+    private async void ToggleByPinCode()
+    {
+        if(ActiveIndex == 0)
+        {
+            IsSearchByPin = true;
+            DynamicRender = null;
+        }
+        else
+        {
+            IsSearchByPin = false;
+            DynamicRender = null;
+        }
+    }
+
+    private void SerchResult(string apiUrl)
+    {
+        Dictionary<string, string> Attributes = new Dictionary<string, string>();
+        Attributes.Add("apiUrl", apiUrl);
+        DynamicRender = CreateComponent("SlotDetails", Attributes);
+    }
+
+    private RenderFragment CreateComponent(string ComponentName, Dictionary<string, string> Attributes) => builder =>
+    {
+        int i = 0;
+        builder.OpenComponent(i++, typeof(SlotDetails));
+        //builder.OpenComponent(i++,Type.GetType(ComponentName));
+        foreach (var item in Attributes)
+            builder.AddAttribute(i++,item.Key,item.Value);
+        builder.CloseComponent();
     };
 
-
-    private async void Toggle()
-    {
-        Console.WriteLine("1");
-        Console.WriteLine(FeaturesDateTime?.ToString("dd-MM-yyyy"));
-        Console.WriteLine(pinCode);
-        string Api = Constant.APIBaseUrl + Constant.findByPin;
-        try
-        {
-            slots = await Http.GetFromJsonAsync<Slot>(string.Format(Api,pinCode, FeaturesDateTime?.ToString("dd-MM-yyyy")));
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("NO");
-            Console.WriteLine(ex.Message);
-        }
-        finally
-        {
-            Console.WriteLine(slots?.sessions?.Count);
-        }
-        Task.WaitAll();
-        Console.WriteLine("2");
-
-    }
 }
 
 <style>
