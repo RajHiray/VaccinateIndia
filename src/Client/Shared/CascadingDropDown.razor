@@ -9,7 +9,7 @@
         <div class="form-group row mt-5">
             <label for="DistrictId" class="col-sm-2 col-form-label"> Select District : </label>
             <div class="col-sm-4">
-                <CustomDropdown DDName="District" DataSource="StatesDataSource" @bind-SelectedId="@district.DistrictId">
+                <CustomDropdown DDName="District" DataSource="StatesDataSource" @bind-SelectedId="@district.DistrictId" IsDisabled="ShouldBeDisabled">
                 </CustomDropdown>
                 <ValidationMessage For="() => district.DistrictId" />
             </div>
@@ -36,6 +36,9 @@
 
     [Parameter]
     public EventCallback<string> SerchResult { get; set; }
+
+    [Parameter]
+    public bool ShouldBeDisabled { get; set; } = true;
 
     public Dictionary<int, string> StatesDataSource { get; set; }
 
