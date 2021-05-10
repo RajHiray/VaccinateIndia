@@ -1,7 +1,7 @@
 ﻿
 @if (DataSource != null)
 {
-    <select class="custom-select" @onchange="OnSelectedIdChanged" title="@DDName is required ">
+    <select class="custom-select" @onchange="OnSelectedIdChanged" title="@DDName is required" disabled=@IsDisabled>
         <option value="Select" selected disabled="disabled">Select @DDName</option>
         @foreach (var item in DataSource)
         {
@@ -21,6 +21,9 @@
 
     [Parameter]
     public int SelectedId { get; set; }
+
+    [Parameter]
+    public bool IsDisabled { get; set; } = true;
 
     [Parameter]
     public EventCallback<int> SelectedIdChanged { get; set; }

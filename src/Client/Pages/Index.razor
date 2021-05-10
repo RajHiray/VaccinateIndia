@@ -31,7 +31,7 @@
     private int ActiveIndex;
     private RenderFragment DynamicRender { get; set; }
 
-    private async void ToggleByPinCode()
+    private void ToggleByPinCode()
     {
         if(ActiveIndex == 0)
         {
@@ -68,5 +68,8 @@
     /* Switch Styles */
     .content-wrapper {
         margin-top: 47px;
+    }
+    .mdc-tab-scroller__scroll-content{
+        flex:none;
     }
 </style>

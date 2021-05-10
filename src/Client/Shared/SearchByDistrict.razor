@@ -3,12 +3,19 @@
 <div class="form-group row mt-5">
     <label for="inputpin" class="col-sm-2 col-form-label required"> Select State : </label>
     <div class="col-sm-4">
-        <CustomDropdown DDName="State" DataSource="StatesDataSource" @bind-SelectedId="StateId">
+        <CustomDropdown DDName="State" DataSource="StatesDataSource" @bind-SelectedId="StateId" IsDisabled="false">
         </CustomDropdown>
     </div>
 </div>
-<CascadingDropDown SelectedId="StateId" SerchResult="SerchResult"/>
 
+@if (StateId == 0)
+{
+    <CascadingDropDown SelectedId="StateId" SerchResult="SerchResult" ShouldBeDisabled="true" />
+}
+else
+{
+    <CascadingDropDown SelectedId="StateId" SerchResult="SerchResult" ShouldBeDisabled="false" />
+}
 
 @code {
 
@@ -23,7 +30,7 @@
     {
         try
         {
-            var States = await Http.GetFromJsonAsync<States>(Constant.APIBaseUrl+Constant.GetStates);
+            var States = await Http.GetFromJsonAsync<States>(Constant.APIBaseUrl + Constant.GetStates);
             StatesDataSource = new Dictionary<int, string>();
             foreach (var state in States?.states)
             {
@@ -34,5 +41,10 @@
         {
             Console.WriteLine(Ex.Message);
         }
+    }
+
+    private void OnValidStateSelect()
+    {
+        ShouldCascadingDropdownBeDisabled = false;
     }
 }
