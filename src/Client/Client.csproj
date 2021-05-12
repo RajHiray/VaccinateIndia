@@ -21,9 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\sample-data\States.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Folder Include="wwwroot\sample-data\" />
   </ItemGroup>
 
 </Project>
