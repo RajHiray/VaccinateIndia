@@ -1,7 +1,8 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: Calibri;
+    font-weight: 800;
 }
 
 a, .btn-link {
@@ -47,7 +48,9 @@ app {
         }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background-color: #000;
+    font-size: larger;
+    font-weight: 400;
 }
 
     .sidebar .top-row {
@@ -56,6 +59,7 @@ app {
 
     .sidebar .navbar-brand {
         font-size: 1.1rem;
+        font-size: larger;
     }
 
     .sidebar .oi {
@@ -80,11 +84,12 @@ app {
 
         .sidebar .nav-item a {
             color: #d7d7d7;
-            border-radius: 4px;
+            border-radius: 15px;
             height: 3rem;
+            font-size: larger;
             display: flex;
             align-items: center;
-            line-height: 3rem;
+            line-height: 5rem;
         }
 
             .sidebar .nav-item a.active {
@@ -163,7 +168,7 @@ app {
     }
 
     .main .top-row {
-        position: sticky;
+        position: relative;
         top: 0;
     }
 
