@@ -1,8 +1,7 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 html, body {
-    font-family: Calibri;
-    font-weight: 800;
+    font-weight: 600;
 }
 
 a, .btn-link {
@@ -11,8 +10,13 @@ a, .btn-link {
 
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: #6200ee;
+    border-color: #6200ee;
+}
+
+.btn-primary:hover {
+    background-color: #6200ee;
+    border-color: #6200ee;
 }
 
 app {
@@ -185,4 +189,37 @@ app {
         /* Never collapse the sidebar for wide screens */
         display: block;
     }
+}
+.offset-2 {
+    margin-left: 17.666667%;
+}
+.mdc-table th {
+    line-height: 1.75rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-decoration: inherit;
+    text-transform: inherit;
+    background-color: rgba(0, 0, 0, 0.08);
+    font-size: 1.14rem;
+    color: #202124;
+    text-align: left;
+    border: 1px solid #202124;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: #202124;
+    border-right-color: #202124;
+    border-bottom-color: #202124;
+    border-left-color: #202124;
+    padding: 12px 12px 12px 24px;
+}
+.footer{
+    bottom:0;
+    font-weight:300;
+    position: absolute;
 }
