@@ -16,17 +16,17 @@ Tool to check appointment slots and help to get vaccinate as soon as possible.
 ## How to Use: ##
 
 User can check availability of slots vaccination centers by your city or zip code. ### 
-![SlotsAvailability](https://rajhiray.github.io/post/covid19-vaccine-tracker/#SlotsAvailability)
+![SlotsAvailability](https://rajhiray.github.io/post/covid19-vaccine-tracker/SlotsAvailability.JPG)
 
 Subscribe for mail alert using tool and as soon as a slot for vaccination of provided age group and area code is available, the tool will send you a notification and then you may proceed to Arogya Setu app to book that slot.
 
 No need to register with E-mail or Mobile number.
 
 Just provide Pin Code, Email and Forget.
-![Notification](https://rajhiray.github.io/post/covid19-vaccine-tracker/#Notification)
+![Notification](https://rajhiray.github.io/post/covid19-vaccine-tracker/Notification.JPG)
 
 ###  Sample E-Mail Alert. ###
-![MailAlert](https://rajhiray.github.io/post/covid19-vaccine-tracker/#MailAlert)
+![MailAlert](https://rajhiray.github.io/post/covid19-vaccine-tracker/MailAlert.JPG)
 
 Developers are most well come to contribute more on <a href="https://github.com/RajHiray/VaccinateIndia/" target="_blank"> git repo </a>
 
