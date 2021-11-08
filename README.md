@@ -32,7 +32,7 @@ Developers are most well come to contribute more on <a href="https://github.com/
 
 ## Technology
     1. .Net Blazor Webassembly.
-    1. GitHub Actions.
-    1. GitHub Pages.
-    1. Microsoft Power Automate
-    1. SharePoint
+    2. GitHub Actions.
+    3. GitHub Pages.
+    4. Microsoft Power Automate
+    5. SharePoint
